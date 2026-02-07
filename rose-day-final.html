@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Rose Day! 🌹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating roses animation */
+        .rose {
+            position: absolute;
+            font-size: 30px;
+            animation: float 15s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #e74c3c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .question {
+            font-size: 1.5em;
+            color: #333;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+
+        .button-container {
+            margin-top: 40px;
+            position: relative;
+            min-height: 200px;
+            width: 100%;
+            border: 2px dashed rgba(231, 76, 60, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: absolute;
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        #yesBtn.disappearing {
+            display: none;
+        }
+
+        #noBtn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .thank-you {
+            display: none;
+        }
+
+        .thank-you.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .message-box p {
+            color: #333;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .rose-emoji {
+            font-size: 3em;
+            margin: 20px 0;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .response-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .response-section p {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 400px;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .send-btn {
+            margin-top: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .status-message {
+            margin-top: 10px;
+            color: #28a745;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Admin panel styles */
+        .admin-panel {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .admin-panel:hover {
+            background: rgba(0,0,0,0.9);
+        }
+
+        .response-viewer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 90%;
+            z-index: 2000;
+        }
+
+        .response-viewer.show {
+            display: block;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1999;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #e74c3c;
+        }
+
+        .response-content {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            min-height: 100px;
+        }
+
+        .copy-response-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .copy-response-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin access button (only visible to you) -->
+    <div class="admin-panel" onclick="showResponses()" title="Click to view responses (Admin only)">
+        👁️ View Responses
+    </div>
+
+    <!-- Response viewer modal -->
+    <div class="overlay" id="overlay" onclick="closeViewer()"></div>
+    <div class="response-viewer" id="responseViewer">
+        <span class="close-btn" onclick="closeViewer()">×</span>
+        <h2 style="color: #667eea; margin-bottom: 20px;">Her Response 💌</h2>
+        <div class="response-content" id="responseContent">
+            <em style="color: #999;">No response yet...</em>
+        </div>
+        <button class="copy-response-btn" onclick="copyResponse()">Copy Response 📋</button>
+    </div>
+
+    <div class="container">
+        <div class="question-section">
+            <h1>Happy Rose Day! 🌹</h1>
+            <div class="rose-emoji">🌹</div>
+            <p class="question">Will you accept this rose from me on this special Rose Day?</p>
+            
+            <div class="button-container">
+                <button id="yesBtn">Yes! 💕</button>
+                <button id="noBtn">No 😢</button>
+            </div>
+        </div>
+
+        <div class="thank-you" id="thankYou">
+            <div class="rose-emoji">🌹💝🌹</div>
+            <h1>Thank You So Much! 💕</h1>
+            <div class="message-box">
+                <p><strong>You've made this Rose Day special!</strong></p>
+                <p>I'm so happy you said yes! You mean the world to me, and I can't wait to celebrate this beautiful day with you.</p>
+                <p>Tomorrow, I want to watch a movie. Would you like to join me? 🌹✨</p>
+            </div>
+            
+            <div class="response-section">
+                <p>Would you like to say something? 💬</p>
+                <textarea id="responseInput" placeholder="Type your message here..."></textarea>
+                <br>
+                <button class="send-btn" onclick="saveResponse()">Send Message 💌</button>
+                <p class="status-message" id="statusMsg">✓ Message sent!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating roses
+        function createRose() {
+            const rose = document.createElement('div');
+            rose.className = 'rose';
+            rose.textContent = '🌹';
+            rose.style.left = Math.random() * 100 + 'vw';
+            rose.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            rose.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(rose);
+
+            setTimeout(() => rose.remove(), 20000);
+        }
+
+        // Create roses periodically
+        setInterval(createRose, 1000);
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createRose, i * 500);
+        }
+
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionSection = document.querySelector('.question-section');
+        const thankYou = document.getElementById('thankYou');
+
+        let clickCount = 0;
+        const maxClicks = 3;
+
+        // Initialize button positions
+        function initializeButtons() {
+            yesBtn.style.left = '30px';
+            yesBtn.style.top = '50%';
+            yesBtn.style.transform = 'translateY(-50%)';
+            
+            noBtn.style.right = '30px';
+            noBtn.style.top = '50%';
+            noBtn.style.transform = 'translateY(-50%)';
+            noBtn.style.left = 'auto';
+        }
+
+        setTimeout(initializeButtons, 100);
+
+        // Move button to random position
+        function moveButton(button) {
+            const container = document.querySelector('.button-container');
+            const containerRect = container.getBoundingClientRect();
+            const buttonRect = button.getBoundingClientRect();
+            
+            const maxX = containerRect.width - buttonRect.width - 40;
+            const maxY = containerRect.height - buttonRect.height - 40;
+            
+            const randomX = 20 + Math.random() * maxX;
+            const randomY = 20 + Math.random() * maxY;
+            
+            button.style.left = randomX + 'px';
+            button.style.top = randomY + 'px';
+            button.style.right = 'auto';
+            button.style.transform = 'none';
+        }
+
+        // Yes button functionality
+        yesBtn.addEventListener('click', () => {
+            if (clickCount < maxClicks) {
+                clickCount++;
+                yesBtn.classList.add('disappearing');
+                
+                setTimeout(() => {
+                    yesBtn.classList.remove('disappearing');
+                    moveButton(yesBtn);
+                }, 500);
+            } else {
+                questionSection.style.display = 'none';
+                thankYou.classList.add('show');
+            }
+        });
+
+        // No button functionality
+        noBtn.addEventListener('mouseenter', () => {
+            moveButton(noBtn);
+        });
+
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButton(noBtn);
+        });
+
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveButton(noBtn);
+            return false;
+        });
+
+        // Save response to localStorage
+        function saveResponse() {
+            const response = document.getElementById('responseInput').value;
+            const sendBtn = event.target;
+            const statusMsg = document.getElementById('statusMsg');
+            
+            if (!response.trim()) {
+                alert('Please write a message first! 💕');
+                return;
+            }
+            
+            const timestamp = new Date().toLocaleString();
+            const responseData = {
+                message: response,
+                timestamp: timestamp
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('roseday_response', JSON.stringify(responseData));
+            
+            // Show success
+            statusMsg.style.display = 'block';
+            statusMsg.textContent = '✓ Message sent successfully!';
+            
+            // Disable form
+            document.getElementById('responseInput').disabled = true;
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Message Sent ✓';
+        }
+
+        // Show responses (admin only)
+        function showResponses() {
+            const stored = localStorage.getItem('roseday_response');
+            const responseContent = document.getElementById('responseContent');
+            
+            if (stored) {
+                const data = JSON.parse(stored);
+                responseContent.innerHTML = `
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 10px;">
+                        <strong>Received:</strong> ${data.timestamp}
+                    </p>
+                    <p style="color: #333; font-size: 1.1em; line-height: 1.6;">
+                        ${data.message}
+                    </p>
+                `;
+            } else {
+                responseContent.innerHTML = '<em style="color: #999;">No response yet...</em>';
+            }
+            
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('responseViewer').classList.add('show');
+        }
+
+        // Close viewer
+        function closeViewer() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('responseViewer').classList.remove('show');
+        }
+
+        // Copy response
+        function copyResponse() {
+            const stored = localStorage.getItem('roseday_response');
+            if (!stored) {
+                alert('No response to copy!');
+                return;
+            }
+            
+            const data = JSON.parse(stored);
+            const text = `Rose Day Response\nReceived: ${data.timestamp}\n\nHer Message:\n${data.message}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                btn.textContent = 'Copied! ✓';
+                btn.style.background = '#218838';
+                setTimeout(() => {
+                    btn.textContent = 'Copy Response 📋';
+                    btn.style.background = '#28a745';
+                }, 2000);
+            }).catch(() => {
+                alert('Response copied!');
+            });
+        }
+    </script>
+</body>
+</html>
